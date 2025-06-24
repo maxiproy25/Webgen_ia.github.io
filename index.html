@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="WebGen Creator - La aplicación definitiva para crear páginas web profesionales">
-    <meta name="theme-color" content="#4e54c8">
-    <title>WebGen Creator - Panel de Administración</title>
+    <title>WebGen Creator - Generador Web Profesional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --color-primary: #4e54c8;
@@ -18,8 +17,6 @@
             --color-text: #333;
             --color-card: #ffffff;
             --color-success: #28a745;
-            --color-warning: #ffc107;
-            --color-danger: #dc3545;
             --gradient-primary: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
             --gradient-accent: linear-gradient(135deg, var(--color-accent), #ff8e8e);
             --shadow: 0 10px 30px rgba(0,0,0,0.1);
@@ -198,15 +195,12 @@
             background: var(--gradient-accent);
             box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
         }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, var(--color-warning), #ffda6a);
-            box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(135deg, var(--color-danger), #e4606d);
-            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            box-shadow: none;
         }
         
         /* Cards de características */
@@ -510,211 +504,98 @@
             font-size: 1rem;
             color: #666;
         }
-        
-        /* Panel de Administración */
-        .admin-panel {
-            padding: 0 0 100px;
-        }
-        
-        .admin-container {
+
+        /* Panel de personalización */
+        .customization-panel {
             background: var(--color-card);
-            border-radius: 25px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .admin-header {
-            background: var(--gradient-primary);
-            color: white;
-            padding: 25px 40px;
-            position: relative;
-        }
-        
-        .admin-header h2 {
-            font-size: 1.8rem;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .admin-header h2 i {
-            font-size: 1.5rem;
-        }
-        
-        .admin-body {
-            padding: 40px;
-            min-height: 500px;
-        }
-        
-        .login-section {
-            max-width: 500px;
-            margin: 0 auto;
+            border-radius: 20px;
             padding: 30px;
-            border-radius: 15px;
-            background: #f8f9fa;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            box-shadow: var(--shadow);
+            margin-top: 40px;
         }
-        
-        .login-title {
-            text-align: center;
+
+        .customization-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 30px;
-            color: var(--color-primary);
-            position: relative;
             padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
-        
-        .login-title:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: var(--gradient-primary);
+
+        .customization-header h3 {
+            font-size: 1.5rem;
+            color: var(--color-dark);
         }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 20px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
-            outline: none;
-        }
-        
-        .password-container {
-            position: relative;
-        }
-        
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #777;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-        
-        .error-message {
-            color: var(--color-danger);
-            font-size: 0.9rem;
-            margin-top: 8px;
-            display: none;
-        }
-        
-        .admin-dashboard {
-            display: none;
-        }
-        
-        .admin-stats {
+
+        .customization-options {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 40px;
         }
-        
-        .admin-stat-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
+
+        .option-group {
+            margin-bottom: 25px;
         }
-        
-        .admin-stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+        .option-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
-        
-        .admin-stat-icon {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 15px;
-            background: linear-gradient(135deg, rgba(78, 84, 200, 0.1), rgba(143, 148, 251, 0.1));
-            border-radius: 50%;
+
+        .color-picker {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: var(--color-primary);
-        }
-        
-        .admin-stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--color-dark);
-        }
-        
-        .admin-stat-label {
-            color: #666;
-            font-size: 0.95rem;
-        }
-        
-        .admin-actions {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        
-        .admin-action-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-        
-        .admin-action-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        
-        .admin-action-card h3 {
-            display: flex;
-            align-items: center;
             gap: 10px;
-            margin-bottom: 15px;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .color-option.selected {
+            border: 2px solid var(--color-dark);
+            transform: scale(1.1);
+        }
+
+        .font-selector {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .layout-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .layout-option {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .layout-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(78, 84, 200, 0.05);
+        }
+
+        .layout-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
             color: var(--color-primary);
         }
-        
-        .admin-action-card p {
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .logout-section {
-            text-align: right;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
+
         /* Footer */
         footer {
             background: var(--color-dark);
@@ -817,10 +698,6 @@
             .ai-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
-            .admin-header h2 {
-                font-size: 1.5rem;
-            }
         }
         
         @media (max-width: 480px) {
@@ -830,14 +707,6 @@
             
             .ai-stats {
                 grid-template-columns: 1fr;
-            }
-            
-            .admin-body {
-                padding: 20px;
-            }
-            
-            .login-section {
-                padding: 20px;
             }
         }
     </style>
@@ -856,7 +725,7 @@
                         <li><a href="#" class="active">Inicio</a></li>
                         <li><a href="#generator">Generador</a></li>
                         <li><a href="#ai">Asistente IA</a></li>
-                        <li><a href="#admin">Admin</a></li>
+                        <li><a href="#customize">Personalizar</a></li>
                     </ul>
                 </nav>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -944,7 +813,7 @@
             <div class="generator-container">
                 <div class="generator-header">
                     <h2>Generador de Sitios Web</h2>
-                    <div class="btn">Nuevo Proyecto</div>
+                    <div class="btn" id="newProjectBtn">Nuevo Proyecto</div>
                 </div>
                 
                 <div class="generator-body">
@@ -953,22 +822,22 @@
                         <p>Comienza con una plantilla profesional y personalízala a tu gusto</p>
                         
                         <div class="template-selector">
-                            <div class="template selected">
+                            <div class="template selected" data-template="restaurant">
                                 <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Restaurante">
                                 <div class="template-name">Restaurante</div>
                             </div>
                             
-                            <div class="template">
+                            <div class="template" data-template="store">
                                 <img src="https://images.unsplash.com/photo-1526947425960-945c6e72858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Tienda">
                                 <div class="template-name">Tienda</div>
                             </div>
                             
-                            <div class="template">
+                            <div class="template" data-template="blog">
                                 <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog">
                                 <div class="template-name">Blog</div>
                             </div>
                             
-                            <div class="template">
+                            <div class="template" data-template="services">
                                 <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Servicios">
                                 <div class="template-name">Servicios</div>
                             </div>
@@ -977,7 +846,7 @@
                         <div style="margin-top: 30px;">
                             <h3>Personaliza tu Sitio</h3>
                             <p>Cambia colores, fuentes, imágenes y contenido con nuestro editor intuitivo</p>
-                            <div class="btn" style="margin-top: 15px;">Abrir Editor</div>
+                            <div class="btn" id="customizeBtn" style="margin-top: 15px;">Abrir Editor</div>
                         </div>
                     </div>
                     
@@ -990,6 +859,86 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Personalización Section -->
+    <section class="ai-panel" id="customize">
+        <div class="container">
+            <div class="customization-panel">
+                <div class="customization-header">
+                    <h3>Personaliza tu Sitio Web</h3>
+                    <div class="btn btn-outline" id="saveBtn">Guardar Cambios</div>
+                </div>
+                
+                <div class="customization-options">
+                    <div class="option-group">
+                        <label>Paleta de colores</label>
+                        <div class="color-picker">
+                            <div class="color-option selected" style="background-color: #4e54c8;" data-color="#4e54c8"></div>
+                            <div class="color-option" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
+                            <div class="color-option" style="background-color: #28a745;" data-color="#28a745"></div>
+                            <div class="color-option" style="background-color: #ffc107;" data-color="#ffc107"></div>
+                            <div class="color-option" style="background-color: #17a2b8;" data-color="#17a2b8"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Tipografía</label>
+                        <select class="font-selector" id="fontSelector">
+                            <option value="Poppins">Poppins (Moderno)</option>
+                            <option value="Roboto">Roboto (Profesional)</option>
+                            <option value="Montserrat">Montserrat (Elegante)</option>
+                            <option value="Open Sans">Open Sans (Legible)</option>
+                            <option value="Playfair Display">Playfair Display (Clásico)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Diseño de Cabecera</label>
+                        <div class="layout-selector">
+                            <div class="layout-option selected" data-layout="header1">
+                                <i class="fas fa-align-left"></i>
+                                <div>Izquierda</div>
+                            </div>
+                            <div class="layout-option" data-layout="header2">
+                                <i class="fas fa-align-center"></i>
+                                <div>Centrado</div>
+                            </div>
+                            <div class="layout-option" data-layout="header3">
+                                <i class="fas fa-columns"></i>
+                                <div>Completo</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Diseño de Contenido</label>
+                        <div class="layout-selector">
+                            <div class="layout-option selected" data-layout="content1">
+                                <i class="fas fa-square"></i>
+                                <div>Simple</div>
+                            </div>
+                            <div class="layout-option" data-layout="content2">
+                                <i class="fas fa-th"></i>
+                                <div>Cuadrícula</div>
+                            </div>
+                            <div class="layout-option" data-layout="content3">
+                                <i class="fas fa-grip-lines"></i>
+                                <div>Lista</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; background: #f8f9fa; padding: 20px; border-radius: 15px;">
+                    <h4>Asistente de IA</h4>
+                    <p>¿Necesitas ayuda para personalizar tu sitio? Pídele sugerencias a nuestro asistente inteligente.</p>
+                    <button class="btn" style="margin-top: 15px;" id="aiHelpBtn">
+                        <i class="fas fa-robot"></i> Obtener Ayuda de IA
+                    </button>
                 </div>
             </div>
         </div>
@@ -1008,7 +957,7 @@
                         <h3>Tu Asistente Exclusivo</h3>
                         <p>Esta IA aprende solo de ti y te ayuda a mejorar tus diseños</p>
                         
-                        <div class="chat-messages">
+                        <div class="chat-messages" id="chatMessages">
                             <div class="message ai">
                                 ¡Hola! Soy tu asistente de IA personal. ¿En qué puedo ayudarte hoy con tu página web?
                             </div>
@@ -1057,120 +1006,6 @@
         </div>
     </section>
 
-    <!-- Admin Section -->
-    <section class="admin-panel" id="admin">
-        <div class="container">
-            <div class="admin-container">
-                <div class="admin-header">
-                    <h2><i class="fas fa-lock"></i> Panel de Administración</h2>
-                </div>
-                
-                <div class="admin-body">
-                    <div id="loginSection" class="login-section">
-                        <h2 class="login-title">Acceso Exclusivo</h2>
-                        <p style="text-align: center; margin-bottom: 30px; color: #666;">
-                            Este panel solo es accesible para el administrador autorizado
-                        </p>
-                        
-                        <div class="form-group">
-                            <label for="adminUser">Usuario</label>
-                            <input type="text" id="adminUser" class="form-control" placeholder="Tu usuario exclusivo">
-                            <div id="userError" class="error-message">Por favor, ingresa tu usuario</div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="adminPass">Contraseña</label>
-                            <div class="password-container">
-                                <input type="password" id="adminPass" class="form-control" placeholder="Tu contraseña segura">
-                                <button class="toggle-password" id="togglePassword">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-                            </div>
-                            <div id="passError" class="error-message">Por favor, ingresa tu contraseña</div>
-                        </div>
-                        
-                        <button id="adminLoginBtn" class="btn" style="width: 100%;">Acceder al Panel</button>
-                        
-                        <div id="loginError" class="error-message" style="text-align: center; margin-top: 20px; display: none;">
-                            Credenciales incorrectas. Por favor, inténtalo de nuevo.
-                        </div>
-                    </div>
-                    
-                    <div id="adminDashboard" class="admin-dashboard">
-                        <h3>Bienvenido, Administrador</h3>
-                        <p>Estas son las herramientas exclusivas de administración de WebGen Creator</p>
-                        
-                        <div class="admin-stats">
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-icon">
-                                    <i class="fas fa-file-code"></i>
-                                </div>
-                                <div class="admin-stat-value">124</div>
-                                <div class="admin-stat-label">Páginas Creadas</div>
-                            </div>
-                            
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-icon">
-                                    <i class="fas fa-users"></i>
-                                </div>
-                                <div class="admin-stat-value">42</div>
-                                <div class="admin-stat-label">Usuarios Activos</div>
-                            </div>
-                            
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-icon">
-                                    <i class="fas fa-database"></i>
-                                </div>
-                                <div class="admin-stat-value">1.7 GB</div>
-                                <div class="admin-stat-label">Almacenamiento</div>
-                            </div>
-                            
-                            <div class="admin-stat-card">
-                                <div class="admin-stat-icon">
-                                    <i class="fas fa-shield-alt"></i>
-                                </div>
-                                <div class="admin-stat-value">100%</div>
-                                <div class="admin-stat-label">Seguridad</div>
-                            </div>
-                        </div>
-                        
-                        <div class="admin-actions">
-                            <div class="admin-action-card">
-                                <h3><i class="fas fa-cog"></i> Configuración del Sistema</h3>
-                                <p>Configura las opciones avanzadas de la aplicación, ajustes de seguridad y preferencias del sistema.</p>
-                                <button class="btn">Acceder</button>
-                            </div>
-                            
-                            <div class="admin-action-card">
-                                <h3><i class="fas fa-chart-line"></i> Estadísticas de Uso</h3>
-                                <p>Visualiza métricas detalladas sobre el uso de la aplicación, proyectos creados y actividad de usuarios.</p>
-                                <button class="btn">Ver Reportes</button>
-                            </div>
-                            
-                            <div class="admin-action-card">
-                                <h3><i class="fas fa-file-export"></i> Exportar Datos</h3>
-                                <p>Exporta todos los proyectos, plantillas y configuraciones en formato ZIP para respaldo o migración.</p>
-                                <button class="btn">Exportar Todo</button>
-                            </div>
-                            
-                            <div class="admin-action-card">
-                                <h3><i class="fas fa-user-cog"></i> Gestión de Usuarios</h3>
-                                <p>Administra cuentas de usuario, permisos de acceso y configuraciones individuales de cada cuenta.</p>
-                                <button class="btn">Administrar</button>
-                            </div>
-                        </div>
-                        
-                        <div class="logout-section">
-                            <button id="logoutBtn" class="btn btn-warning">
-                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer>
         <div class="container">
@@ -1186,7 +1021,7 @@
                         <li><a href="#"><i class="fas fa-star"></i> Características</a></li>
                         <li><a href="#generator"><i class="fas fa-laptop-code"></i> Generador Web</a></li>
                         <li><a href="#ai"><i class="fas fa-robot"></i> Asistente IA</a></li>
-                        <li><a href="#admin"><i class="fas fa-user-shield"></i> Panel Admin</a></li>
+                        <li><a href="#customize"><i class="fas fa-paint-brush"></i> Personalizar</a></li>
                     </ul>
                 </div>
                 
@@ -1210,6 +1045,14 @@
     <script>
         // Funcionalidad principal
         document.addEventListener('DOMContentLoaded', function() {
+            // Variables de estado
+            let currentTemplate = 'restaurant';
+            let primaryColor = '#4e54c8';
+            let secondaryColor = '#8f94fb';
+            let fontFamily = 'Poppins';
+            let headerLayout = 'header1';
+            let contentLayout = 'content1';
+            
             // Menú móvil
             const mobileMenuBtn = document.getElementById('mobileMenuBtn');
             const navMenu = document.getElementById('navMenu');
@@ -1223,20 +1066,155 @@
                 template.addEventListener('click', function() {
                     document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
                     this.classList.add('selected');
+                    currentTemplate = this.dataset.template;
                     
                     // Actualizar vista previa
-                    document.querySelector('.preview-placeholder').innerHTML = `
-                        <i class="fas fa-check-circle" style="color:#4e54c8; font-size: 3rem;"></i>
-                        <p style="margin: 15px 0;">Plantilla seleccionada: <strong>${this.querySelector('.template-name').textContent}</strong></p>
-                        <div class="btn">Personalizar Plantilla</div>
-                    `;
+                    updatePreview();
                 });
+            });
+            
+            // Actualizar vista previa
+            function updatePreview() {
+                const previewContainer = document.querySelector('.preview-container');
+                previewContainer.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: white; border-radius: 10px; overflow: hidden; position: relative;">
+                        <div style="background: ${primaryColor}; padding: 20px; color: white; font-family: ${fontFamily};">
+                            <h3 style="margin: 0;">${getTemplateName(currentTemplate)}</h3>
+                        </div>
+                        <div style="padding: 20px;">
+                            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                                <div style="flex: 1; height: 100px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="fas fa-image" style="font-size: 2rem; color: #ccc;"></i>
+                                </div>
+                                <div style="flex: 2;">
+                                    <h4 style="margin-top: 0; font-family: ${fontFamily};">Contenido de muestra</h4>
+                                    <p style="font-family: ${fontFamily};">Esta es una vista previa de cómo se verá tu sitio web con la plantilla seleccionada y las personalizaciones aplicadas.</p>
+                                </div>
+                            </div>
+                            <div style="background: ${secondaryColor}; padding: 15px; border-radius: 10px; color: white; text-align: center; font-family: ${fontFamily};">
+                                <p>¡Personaliza completamente cada aspecto de tu sitio!</p>
+                            </div>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">
+                            Vista Previa
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Obtener nombre de plantilla
+            function getTemplateName(template) {
+                const names = {
+                    'restaurant': 'Restaurante',
+                    'store': 'Tienda Online',
+                    'blog': 'Blog Personal',
+                    'services': 'Servicios Profesionales'
+                };
+                return names[template] || 'Plantilla Personalizada';
+            }
+            
+            // Botón de personalización
+            document.getElementById('customizeBtn').addEventListener('click', function() {
+                document.querySelector('#customize').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Botón nuevo proyecto
+            document.getElementById('newProjectBtn').addEventListener('click', function() {
+                // Resetear selecciones
+                document.querySelector('.template.selected').classList.remove('selected');
+                document.querySelector('.template[data-template="restaurant"]').classList.add('selected');
+                currentTemplate = 'restaurant';
+                
+                // Resetear personalización
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.color-option[data-color="#4e54c8"]').classList.add('selected');
+                primaryColor = '#4e54c8';
+                secondaryColor = '#8f94fb';
+                
+                document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.layout-option[data-layout="header1"]').classList.add('selected');
+                document.querySelector('.layout-option[data-layout="content1"]').classList.add('selected');
+                headerLayout = 'header1';
+                contentLayout = 'content1';
+                
+                document.getElementById('fontSelector').value = 'Poppins';
+                fontFamily = 'Poppins';
+                
+                // Actualizar vista previa
+                updatePreview();
+                
+                // Mostrar mensaje
+                alert('¡Nuevo proyecto creado! Comienza seleccionando una plantilla.');
+            });
+            
+            // Selector de colores
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    primaryColor = this.dataset.color;
+                    
+                    // Calcular color secundario
+                    if(primaryColor === '#4e54c8') secondaryColor = '#8f94fb';
+                    else if(primaryColor === '#ff6b6b') secondaryColor = '#ff8e8e';
+                    else if(primaryColor === '#28a745') secondaryColor = '#34ce57';
+                    else if(primaryColor === '#ffc107') secondaryColor = '#ffd351';
+                    else if(primaryColor === '#17a2b8') secondaryColor = '#39c0d3';
+                    
+                    updatePreview();
+                });
+            });
+            
+            // Selector de fuentes
+            document.getElementById('fontSelector').addEventListener('change', function() {
+                fontFamily = this.value;
+                updatePreview();
+            });
+            
+            // Selector de layout
+            document.querySelectorAll('.layout-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const layoutType = this.dataset.layout.substring(0, 6); // "header" o "content"
+                    document.querySelectorAll(`.layout-option[data-layout^="${layoutType}"]`).forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    if(layoutType === 'header') headerLayout = this.dataset.layout;
+                    else contentLayout = this.dataset.layout;
+                    
+                    updatePreview();
+                });
+            });
+            
+            // Botón guardar
+            document.getElementById('saveBtn').addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-check"></i> Guardando...';
+                setTimeout(() => {
+                    this.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
+                    setTimeout(() => {
+                        this.innerHTML = 'Guardar Cambios';
+                    }, 2000);
+                }, 1000);
+            });
+            
+            // Botón ayuda IA
+            document.getElementById('aiHelpBtn').addEventListener('click', function() {
+                document.querySelector('#ai').scrollIntoView({ behavior: 'smooth' });
+                
+                // Enviar mensaje automático
+                setTimeout(() => {
+                    const chatMessages = document.getElementById('chatMessages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message', 'ai');
+                    messageDiv.textContent = "He notado que estás personalizando tu sitio. ¿Necesitas sugerencias de diseño? Puedo ayudarte a elegir colores, fuentes o layouts que se adapten a tu negocio.";
+                    chatMessages.appendChild(messageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 500);
             });
             
             // Chat con IA
             const chatInput = document.getElementById('aiInput');
             const sendBtn = document.getElementById('sendMessage');
-            const chatMessages = document.querySelector('.chat-messages');
+            const chatMessages = document.getElementById('chatMessages');
             
             function addMessage(text, isUser = false) {
                 const messageDiv = document.createElement('div');
@@ -1247,122 +1225,39 @@
                 chatMessages.scrollTop = chatMessages.scrollHeight;
             }
             
-            sendBtn.addEventListener('click', () => {
+            sendBtn.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            function sendMessage() {
                 if (chatInput.value.trim() !== '') {
                     addMessage(chatInput.value, true);
                     
                     // Respuesta simulada de IA
                     setTimeout(() => {
                         const responses = [
-                            "Entiendo lo que necesitas. ¿Te gustaría que te sugiera algunos diseños para esa sección?",
-                            "Excelente idea. Podría ayudarte a implementar eso con algunas opciones de diseño profesional.",
-                            "He analizado tu solicitud. ¿Quieres que genere algunas variaciones para que elijas?",
-                            "Esa es una buena sugerencia. Podría optimizar esa parte para mejorar la experiencia del usuario.",
-                            "Tengo algunas ideas para implementar lo que mencionas. ¿Quieres que te muestre algunas opciones?"
+                            "Para tu plantilla de " + getTemplateName(currentTemplate) + ", te recomendaría usar colores complementarios. ¿Te gustaría que sugiera una paleta?",
+                            "La fuente " + fontFamily + " es una buena elección. ¿Quieres ver cómo se vería con un tamaño de letra más grande?",
+                            "He analizado tu diseño actual. Podría optimizar el layout para mejorar la experiencia del usuario. ¿Quieres que genere algunas opciones?",
+                            "Tengo algunas ideas para implementar en tu sitio. ¿Te gustaría que te muestre ejemplos?",
+                            "Basado en tu selección actual, creo que podrías beneficiarte de un diseño más minimalista. ¿Quieres que te sugiera cambios?"
                         ];
                         addMessage(responses[Math.floor(Math.random() * responses.length)]);
                     }, 1000);
                     
                     chatInput.value = '';
                 }
-            });
-            
-            chatInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    sendBtn.click();
-                }
-            });
+            }
             
             // Simulación de IA que aprende
             console.log("Inicializando IA personal...");
-            console.log("Modo de aprendizaje exclusivo activado - Solo responde al administrador autorizado");
+            console.log("Modo de aprendizaje activado - Analizando preferencias de diseño...");
             console.log("Preparando modelos de diseño predictivo...");
             
-            // Guardar datos localmente
-            if (localStorage.getItem('webgen-projects') === null) {
-                localStorage.setItem('webgen-projects', JSON.stringify([]));
-            }
-            
-            // Mensaje de bienvenida para el administrador
-            addMessage("Sistema listo. Solo respondo a tus comandos, administrador.");
-            
-            // Funcionalidad del panel de administración
-            const adminLoginBtn = document.getElementById('adminLoginBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const togglePassword = document.getElementById('togglePassword');
-            const adminPass = document.getElementById('adminPass');
-            
-            // Credenciales válidas (solo para demostración)
-            const validUsername = "admin";
-            const validPassword = "admin123";
-            
-            // Toggle para mostrar/ocultar contraseña
-            if (togglePassword) {
-                togglePassword.addEventListener('click', function() {
-                    if (adminPass.type === "password") {
-                        adminPass.type = "text";
-                        this.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                    } else {
-                        adminPass.type = "password";
-                        this.innerHTML = '<i class="fas fa-eye"></i>';
-                    }
-                });
-            }
-            
-            // Validar credenciales
-            if (adminLoginBtn) {
-                adminLoginBtn.addEventListener('click', function() {
-                    const username = document.getElementById('adminUser').value;
-                    const password = document.getElementById('adminPass').value;
-                    
-                    // Resetear mensajes de error
-                    document.getElementById('userError').style.display = 'none';
-                    document.getElementById('passError').style.display = 'none';
-                    document.getElementById('loginError').style.display = 'none';
-                    
-                    // Validar campos
-                    let isValid = true;
-                    
-                    if (!username) {
-                        document.getElementById('userError').style.display = 'block';
-                        isValid = false;
-                    }
-                    
-                    if (!password) {
-                        document.getElementById('passError').style.display = 'block';
-                        isValid = false;
-                    }
-                    
-                    if (!isValid) return;
-                    
-                    // Verificar credenciales
-                    if (username === validUsername && password === validPassword) {
-                        // Acceso concedido
-                        document.getElementById('loginSection').style.display = 'none';
-                        document.getElementById('adminDashboard').style.display = 'block';
-                    } else {
-                        // Credenciales incorrectas
-                        document.getElementById('loginError').style.display = 'block';
-                    }
-                });
-            }
-            
-            // Cerrar sesión
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', function() {
-                    document.getElementById('adminDashboard').style.display = 'none';
-                    document.getElementById('loginSection').style.display = 'block';
-                    
-                    // Limpiar campos
-                    document.getElementById('adminUser').value = '';
-                    document.getElementById('adminPass').value = '';
-                    
-                    // Ocultar mensajes de error
-                    document.getElementById('userError').style.display = 'none';
-                    document.getElementById('passError').style.display = 'none';
-                    document.getElementById('loginError').style.display = 'none';
-                });
-            }
+            // Inicializar vista previa
+            updatePreview();
         });
     </script>
 </body>
