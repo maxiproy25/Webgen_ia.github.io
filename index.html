@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGen Creator - Generador Web con Asistente IA</title>
+    <title>WebGen Creator - Generador Web Profesional</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
     <style>
         :root {
             --color-primary: #4e54c8;
@@ -202,20 +203,104 @@
             box-shadow: none;
         }
         
-        /* Sección de Asistente */
-        .assistant {
-            padding: 80px 0;
+        /* Cards de características */
+        .features {
+            padding: 100px 0;
         }
         
-        .assistant-container {
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--color-dark);
+            margin-bottom: 15px;
+        }
+        
+        .section-title p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .feature-card {
+            background: var(--color-card);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+            z-index: -1;
+        }
+        
+        .feature-card:hover:before {
+            transform: scaleY(1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(78, 84, 200, 0.1), rgba(143, 148, 251, 0.1));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--color-dark);
+        }
+        
+        /* Generador Web */
+        .generator {
+            padding: 100px 0;
+            background: linear-gradient(to bottom, var(--color-light), #f0f2f5);
+        }
+        
+        .generator-container {
             background: var(--color-card);
             border-radius: 25px;
             box-shadow: var(--shadow);
             overflow: hidden;
-            position: relative;
         }
         
-        .assistant-header {
+        .generator-header {
             background: var(--gradient-primary);
             color: white;
             padding: 25px 40px;
@@ -224,137 +309,246 @@
             align-items: center;
         }
         
-        .assistant-header h2 {
+        .generator-header h2 {
             font-size: 1.8rem;
+        }
+        
+        .generator-body {
+            padding: 40px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .template-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .template {
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 3px solid transparent;
+        }
+        
+        .template:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .template.selected {
+            border-color: var(--color-primary);
+        }
+        
+        .template img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .template-name {
+            padding: 12px 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        
+        .preview-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            height: 400px;
             display: flex;
             align-items: center;
-            gap: 15px;
+            justify-content: center;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
+            overflow: auto;
         }
         
-        .assistant-header h2 i {
-            font-size: 1.5rem;
+        .preview-placeholder {
+            text-align: center;
+            color: #999;
         }
         
-        .assistant-body {
+        .preview-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            color: #ddd;
+        }
+        
+        /* Panel de IA */
+        .ai-panel {
+            padding: 100px 0;
+        }
+        
+        .ai-container {
+            background: var(--color-card);
+            border-radius: 25px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+        
+        .ai-header {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 25px 40px;
+        }
+        
+        .ai-header h2 {
+            font-size: 1.8rem;
+        }
+        
+        .ai-body {
             padding: 40px;
-            min-height: 500px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .ai-chat {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            height: 400px;
             display: flex;
             flex-direction: column;
         }
         
-        .assistant-steps {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            position: relative;
-        }
-        
-        .assistant-steps::before {
-            content: '';
-            position: absolute;
-            top: 20px;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: #eee;
-            z-index: 1;
-        }
-        
-        .step {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            width: 24%;
-        }
-        
-        .step-icon {
-            width: 44px;
-            height: 44px;
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
             background: white;
-            border: 3px solid #eee;
+        }
+        
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            background: var(--color-primary);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .message.ai {
+            background: #e9ecef;
+            margin-right: auto;
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        
+        .chat-input button {
+            background: var(--color-primary);
+            color: white;
+            border: none;
             border-radius: 50%;
+            width: 45px;
+            height: 45px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
+            cursor: pointer;
             font-size: 1.2rem;
-            transition: all 0.3s ease;
         }
         
-        .step.active .step-icon {
-            background: var(--color-primary);
-            color: white;
-            border-color: var(--color-primary);
+        .ai-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
         }
         
-        .step.completed .step-icon {
-            background: var(--color-success);
-            color: white;
-            border-color: var(--color-success);
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
         
-        .step-label {
-            font-weight: 600;
-            color: #777;
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        .step.active .step-label,
-        .step.completed .step-label {
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Panel de personalización */
+        .customization-panel {
+            background: var(--color-card);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-top: 40px;
+        }
+
+        .customization-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .customization-header h3 {
+            font-size: 1.5rem;
             color: var(--color-dark);
         }
-        
-        .step-content {
-            flex: 1;
-            display: none;
+
+        .customization-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
         }
-        
-        .step-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .step-form {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        
-        .form-group {
+
+        .option-group {
             margin-bottom: 25px;
         }
-        
-        .form-group label {
+
+        .option-group label {
             display: block;
             margin-bottom: 10px;
             font-weight: 600;
-            color: #555;
         }
-        
-        .form-control {
-            width: 100%;
-            padding: 14px 20px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .form-control:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(78, 84, 200, 0.2);
-            outline: none;
-        }
-        
+
         .color-picker {
             display: flex;
             gap: 10px;
-            flex-wrap: wrap;
         }
-        
+
         .color-option {
             width: 40px;
             height: 40px;
@@ -363,141 +557,157 @@
             border: 2px solid transparent;
             transition: all 0.3s ease;
         }
-        
+
         .color-option.selected {
             border: 2px solid var(--color-dark);
             transform: scale(1.1);
         }
-        
-        .file-upload {
+
+        .font-selector {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .layout-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .layout-option {
+            border: 2px solid #eee;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .layout-option.selected {
+            border-color: var(--color-primary);
+            background: rgba(78, 84, 200, 0.05);
+        }
+
+        .layout-option i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--color-primary);
+        }
+
+        /* Formulario de datos */
+        .data-form {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .image-upload {
             border: 2px dashed #ddd;
             border-radius: 12px;
             padding: 30px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .file-upload:hover {
+
+        .image-upload:hover {
             border-color: var(--color-primary);
-            background: rgba(78, 84, 200, 0.05);
         }
-        
-        .file-upload i {
+
+        .image-upload i {
             font-size: 3rem;
             color: #ddd;
             margin-bottom: 15px;
             display: block;
         }
-        
-        .social-connect {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+
+        .image-preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 15px;
+            display: none;
         }
-        
-        .social-item {
-            border: 1px solid #eee;
-            border-radius: 12px;
-            padding: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+
+        .qr-container {
+            text-align: center;
+            margin-top: 20px;
         }
-        
-        .social-item:hover {
-            border-color: var(--color-primary);
-            background: rgba(78, 84, 200, 0.05);
-        }
-        
-        .social-item i {
-            font-size: 1.5rem;
-            width: 30px;
-        }
-        
-        .social-item.selected {
-            border-color: var(--color-primary);
-            background: rgba(78, 84, 200, 0.1);
-        }
-        
-        .assistant-message {
-            background: #f0f7ff;
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
-            position: relative;
-        }
-        
-        .assistant-message:before {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 30px;
-            width: 20px;
-            height: 20px;
-            background: #f0f7ff;
-            transform: rotate(45deg);
-        }
-        
-        .assistant-message p {
-            margin-bottom: 15px;
-        }
-        
-        .assistant-message .ai-name {
-            font-weight: 600;
-            color: var(--color-primary);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-        
-        .navigation-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-        }
-        
-        /* Vista previa */
-        .preview {
-            padding: 80px 0;
-            background: linear-gradient(to bottom, #f0f2f5, #e6e9ef);
-        }
-        
-        .preview-container {
+
+        #qrCode {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
             background: white;
-            border-radius: 20px;
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
+            padding: 10px;
+            border-radius: 8px;
         }
-        
-        .preview-header {
-            background: var(--color-primary);
+
+        /* Notificación Admin */
+        .admin-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--color-dark);
             color: white;
             padding: 20px;
-            text-align: center;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 2000;
+            display: none;
+            max-width: 400px;
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
         }
-        
-        .preview-body {
-            padding: 40px;
-            min-height: 500px;
-        }
-        
-        .preview-placeholder {
-            text-align: center;
-            color: #999;
-            padding: 50px 20px;
-        }
-        
-        .preview-placeholder i {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: #ddd;
+
+        .admin-notification.show {
             display: block;
+            transform: translateX(0);
         }
-        
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-notification {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
         /* Footer */
         footer {
             background: var(--color-dark);
@@ -558,15 +768,25 @@
             font-size: 0.9rem;
         }
         
+        /* Animaciones */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
         /* Responsive */
         @media (max-width: 992px) {
-            .assistant-steps {
-                flex-wrap: wrap;
-                gap: 20px;
+            .generator-body, .ai-body {
+                grid-template-columns: 1fr;
             }
             
-            .step {
-                width: 48%;
+            .ai-stats {
+                grid-template-columns: repeat(4, 1fr);
             }
         }
         
@@ -587,25 +807,36 @@
                 font-size: 1.2rem;
             }
             
-            .assistant-steps::before {
-                display: none;
+            .ai-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
             }
             
-            .step {
-                width: 100%;
-                text-align: left;
-                display: flex;
-                align-items: center;
-                gap: 15px;
-            }
-            
-            .step-icon {
-                margin: 0;
+            .ai-stats {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Notificación para Admin -->
+    <div class="admin-notification" id="adminNotification">
+        <div class="notification-header">
+            <h3><i class="fas fa-robot"></i> Actualización IA</h3>
+            <button class="close-notification" id="closeNotification">&times;</button>
+        </div>
+        <p>La IA ha aprendido nuevas técnicas de diseño basadas en tendencias actuales. ¿Deseas aplicar estas mejoras a tu sitio?</p>
+        <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="btn" style="flex: 1;">Aplicar Mejoras</button>
+            <button class="btn btn-outline" style="flex: 1;">Más Tarde</button>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="container">
@@ -617,9 +848,10 @@
                 <nav>
                     <ul id="navMenu">
                         <li><a href="#" class="active">Inicio</a></li>
-                        <li><a href="#assistant">Asistente IA</a></li>
-                        <li><a href="#preview">Vista Previa</a></li>
-                        <li><a href="#help">Ayuda</a></li>
+                        <li><a href="#generator">Generador</a></li>
+                        <li><a href="#ai">Asistente IA</a></li>
+                        <li><a href="#customize">Personalizar</a></li>
+                        <li><a href="#" id="adminLink">Admin</a></li>
                     </ul>
                 </nav>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -633,276 +865,123 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <h1>Crea Páginas Web Profesionales con Asistente IA</h1>
-                <p>Guía paso a paso para diseñar, personalizar y publicar sitios web sin necesidad de conocimientos técnicos</p>
-                <a href="#assistant" class="btn btn-accent">Comenzar con Asistente</a>
-                <a href="#preview" class="btn">Ver Ejemplos</a>
+                <h1>Crea Páginas Web Profesionales en Minutos</h1>
+                <p>La aplicación definitiva para diseñar, personalizar y publicar sitios web sin conexión a internet</p>
+                <a href="#generator" class="btn btn-accent">Comenzar Ahora</a>
+                <a href="#ai" class="btn">Conocer al Asistente IA</a>
             </div>
         </div>
     </section>
 
-    <!-- Asistente IA Section -->
-    <section class="assistant" id="assistant">
+    <!-- Features Section -->
+    <section class="features">
         <div class="container">
-            <div class="assistant-container">
-                <div class="assistant-header">
-                    <h2><i class="fas fa-robot"></i> Asistente de Creación Web</h2>
-                    <div class="btn" id="saveProjectBtn">Guardar Proyecto</div>
+            <div class="section-title">
+                <h2>Características Exclusivas</h2>
+                <p>Todo lo que necesitas para crear páginas web impresionantes, directamente desde tu dispositivo</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Diseño Sin Conexión</h3>
+                    <p>Crea y edita tus páginas web sin necesidad de internet. Trabaja donde quieras.</p>
                 </div>
                 
-                <div class="assistant-body">
-                    <div class="assistant-steps">
-                        <div class="step active" id="step1">
-                            <div class="step-icon">
-                                <i class="fas fa-th-large"></i>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Multidispositivo</h3>
+                    <p>Usa la aplicación en tu teléfono, tablet o computadora. Tus proyectos se sincronizan automáticamente.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>Plantillas Profesionales</h3>
+                    <p>Elige entre más de 50 plantillas para diferentes rubros y personalízalas a tu gusto.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Asistente IA Personal</h3>
+                    <p>Una inteligencia artificial que aprende de ti y te ayuda a crear mejores diseños.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Exportación Fácil</h3>
+                    <p>Exporta tus páginas como archivos HTML listos para publicar o como proyectos para seguir editando.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h3>Seguridad Total</h3>
+                    <p>Tus proyectos se guardan localmente con encriptación avanzada. Solo tú tienes acceso.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Generator Section -->
+    <section class="generator" id="generator">
+        <div class="container">
+            <div class="generator-container">
+                <div class="generator-header">
+                    <h2>Generador de Sitios Web</h2>
+                    <div class="btn" id="newProjectBtn">Nuevo Proyecto</div>
+                </div>
+                
+                <div class="generator-body">
+                    <div>
+                        <h3>Selecciona una Plantilla</h3>
+                        <p>Comienza con una plantilla profesional y personalízala a tu gusto</p>
+                        
+                        <div class="template-selector">
+                            <div class="template selected" data-template="restaurant">
+                                <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Restaurante">
+                                <div class="template-name">Restaurante</div>
                             </div>
-                            <div class="step-label">Plantilla</div>
+                            
+                            <div class="template" data-template="store">
+                                <img src="https://images.unsplash.com/photo-1526947425960-945c6e72858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Tienda">
+                                <div class="template-name">Tienda</div>
+                            </div>
+                            
+                            <div class="template" data-template="blog">
+                                <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog">
+                                <div class="template-name">Blog</div>
+                            </div>
+                            
+                            <div class="template" data-template="services">
+                                <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Servicios">
+                                <div class="template-name">Servicios</div>
+                            </div>
                         </div>
                         
-                        <div class="step" id="step2">
-                            <div class="step-icon">
-                                <i class="fas fa-palette"></i>
-                            </div>
-                            <div class="step-label">Diseño</div>
-                        </div>
-                        
-                        <div class="step" id="step3">
-                            <div class="step-icon">
-                                <i class="fas fa-image"></i>
-                            </div>
-                            <div class="step-label">Imágenes</div>
-                        </div>
-                        
-                        <div class="step" id="step4">
-                            <div class="step-icon">
-                                <i class="fas fa-id-card"></i>
-                            </div>
-                            <div class="step-label">Contacto</div>
+                        <div style="margin-top: 30px;">
+                            <h3>Personaliza tu Sitio</h3>
+                            <p>Cambia colores, fuentes, imágenes y contenido con nuestro editor intuitivo</p>
+                            <div class="btn" id="customizeBtn" style="margin-top: 15px;">Abrir Editor</div>
                         </div>
                     </div>
                     
-                    <!-- Paso 1: Selección de plantilla -->
-                    <div class="step-content active" id="step1-content">
-                        <div class="step-form">
-                            <h3>Selecciona una plantilla</h3>
-                            <p>Elige el diseño base para tu sitio web</p>
-                            
-                            <div class="form-group">
-                                <div class="template-selector" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
-                                    <div class="template" data-template="restaurant">
-                                        <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Restaurante" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px;">
-                                        <div class="template-name" style="text-align: center; padding: 15px; font-weight: 600;">Restaurante</div>
-                                    </div>
-                                    
-                                    <div class="template" data-template="store">
-                                        <img src="https://images.unsplash.com/photo-1526947425960-945c6e72858f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Tienda" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px;">
-                                        <div class="template-name" style="text-align: center; padding: 15px; font-weight: 600;">Tienda</div>
-                                    </div>
-                                    
-                                    <div class="template" data-template="blog">
-                                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Blog" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px;">
-                                        <div class="template-name" style="text-align: center; padding: 15px; font-weight: 600;">Blog</div>
-                                    </div>
-                                    
-                                    <div class="template" data-template="services">
-                                        <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" alt="Servicios" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px;">
-                                        <div class="template-name" style="text-align: center; padding: 15px; font-weight: 600;">Servicios</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="assistant-message">
-                                <div class="ai-name">
-                                    <i class="fas fa-robot"></i> Asistente IA
-                                </div>
-                                <p>¡Hola! Soy tu asistente de IA para la creación web. Vamos a crear tu sitio paso a paso.</p>
-                                <p>Para comenzar, selecciona una plantilla que se ajuste al tipo de sitio que deseas crear. Puedes cambiar esto más tarde si lo necesitas.</p>
-                            </div>
-                            
-                            <div class="navigation-buttons">
-                                <button class="btn btn-outline" disabled>
-                                    <i class="fas fa-arrow-left"></i> Anterior
-                                </button>
-                                <button class="btn" id="nextToStep2">
-                                    Siguiente <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Paso 2: Personalización de diseño -->
-                    <div class="step-content" id="step2-content">
-                        <div class="step-form">
-                            <h3>Personaliza tu diseño</h3>
-                            <p>Elige los colores y fuentes para tu sitio</p>
-                            
-                            <div class="form-group">
-                                <label>Paleta de colores</label>
-                                <div class="color-picker">
-                                    <div class="color-option selected" style="background-color: #4e54c8;" data-color="#4e54c8"></div>
-                                    <div class="color-option" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
-                                    <div class="color-option" style="background-color: #28a745;" data-color="#28a745"></div>
-                                    <div class="color-option" style="background-color: #ffc107;" data-color="#ffc107"></div>
-                                    <div class="color-option" style="background-color: #17a2b8;" data-color="#17a2b8"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="websiteTitle">Título del sitio</label>
-                                <input type="text" id="websiteTitle" class="form-control" placeholder="Ej: Mi Restaurante Elegante">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="fontSelector">Fuente principal</label>
-                                <select id="fontSelector" class="form-control">
-                                    <option value="Poppins">Poppins (Moderno)</option>
-                                    <option value="Roboto">Roboto (Profesional)</option>
-                                    <option value="Montserrat">Montserrat (Elegante)</option>
-                                    <option value="Open Sans">Open Sans (Legible)</option>
-                                </select>
-                            </div>
-                            
-                            <div class="assistant-message">
-                                <div class="ai-name">
-                                    <i class="fas fa-robot"></i> Asistente IA
-                                </div>
-                                <p>Bien hecho. Ahora, elige una paleta de colores que represente la identidad de tu marca.</p>
-                                <p>El título que ingreses será el nombre principal de tu sitio. Puede ser el nombre de tu negocio, blog o proyecto personal.</p>
-                            </div>
-                            
-                            <div class="navigation-buttons">
-                                <button class="btn btn-outline" id="backToStep1">
-                                    <i class="fas fa-arrow-left"></i> Anterior
-                                </button>
-                                <button class="btn" id="nextToStep3">
-                                    Siguiente <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Paso 3: Subida de imágenes -->
-                    <div class="step-content" id="step3-content">
-                        <div class="step-form">
-                            <h3>Agrega imágenes y logo</h3>
-                            <p>Sube las imágenes que representen tu negocio</p>
-                            
-                            <div class="form-group">
-                                <label>Logo de tu sitio</label>
-                                <div class="file-upload" id="logoUpload">
-                                    <i class="fas fa-cloud-upload-alt"></i>
-                                    <p>Haz clic para subir tu logo</p>
-                                    <p class="file-info" style="font-size: 0.9rem; color: #777; margin-top: 10px;"></p>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Imágenes de portada</label>
-                                <div class="file-upload" id="coverUpload">
-                                    <i class="fas fa-images"></i>
-                                    <p>Haz clic para subir imágenes de portada</p>
-                                    <p class="file-info" style="font-size: 0.9rem; color: #777; margin-top: 10px;"></p>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Imágenes adicionales</label>
-                                <div class="file-upload" id="galleryUpload">
-                                    <i class="fas fa-image"></i>
-                                    <p>Haz clic para subir imágenes para tu galería</p>
-                                    <p class="file-info" style="font-size: 0.9rem; color: #777; margin-top: 10px;"></p>
-                                </div>
-                            </div>
-                            
-                            <div class="assistant-message">
-                                <div class="ai-name">
-                                    <i class="fas fa-robot"></i> Asistente IA
-                                </div>
-                                <p>Las imágenes son fundamentales para atraer a tus visitantes. Te recomiendo:</p>
-                                <ul style="margin-left: 20px; margin-top: 10px;">
-                                    <li>Logo: PNG con fondo transparente</li>
-                                    <li>Portada: Imágenes de alta calidad (min. 1200px ancho)</li>
-                                    <li>Galería: Muestras de tus productos o servicios</li>
-                                </ul>
-                                <p>Puedes subir más imágenes más adelante si lo necesitas.</p>
-                            </div>
-                            
-                            <div class="navigation-buttons">
-                                <button class="btn btn-outline" id="backToStep2">
-                                    <i class="fas fa-arrow-left"></i> Anterior
-                                </button>
-                                <button class="btn" id="nextToStep4">
-                                    Siguiente <i class="fas fa-arrow-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Paso 4: Información de contacto -->
-                    <div class="step-content" id="step4-content">
-                        <div class="step-form">
-                            <h3>Información de contacto</h3>
-                            <p>Proporciona formas para que tus clientes te contacten</p>
-                            
-                            <div class="form-group">
-                                <label>Correo electrónico</label>
-                                <input type="email" id="contactEmail" class="form-control" placeholder="tunegocio@ejemplo.com">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Teléfono</label>
-                                <input type="tel" id="contactPhone" class="form-control" placeholder="+34 123 456 789">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Dirección física (opcional)</label>
-                                <input type="text" id="contactAddress" class="form-control" placeholder="Calle Principal, Ciudad">
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Redes sociales</label>
-                                <div class="social-connect">
-                                    <div class="social-item" data-social="facebook">
-                                        <i class="fab fa-facebook" style="color: #1877f2;"></i>
-                                        <div>Conectar Facebook</div>
-                                    </div>
-                                    
-                                    <div class="social-item" data-social="instagram">
-                                        <i class="fab fa-instagram" style="color: #e1306c;"></i>
-                                        <div>Conectar Instagram</div>
-                                    </div>
-                                    
-                                    <div class="social-item" data-social="whatsapp">
-                                        <i class="fab fa-whatsapp" style="color: #25d366;"></i>
-                                        <div>Agregar WhatsApp</div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Código QR (opcional)</label>
-                                <div class="file-upload" id="qrUpload">
-                                    <i class="fas fa-qrcode"></i>
-                                    <p>Haz clic para subir tu código QR</p>
-                                    <p class="file-info" style="font-size: 0.9rem; color: #777; margin-top: 10px;"></p>
-                                </div>
-                            </div>
-                            
-                            <div class="assistant-message">
-                                <div class="ai-name">
-                                    <i class="fas fa-robot"></i> Asistente IA
-                                </div>
-                                <p>¡Estás casi listo! La información de contacto es crucial para que tus clientes puedan encontrarte.</p>
-                                <p>Te recomiendo conectar al menos una red social para aumentar tu presencia online. El código QR es útil para folletos o tarjetas de visita.</p>
-                            </div>
-                            
-                            <div class="navigation-buttons">
-                                <button class="btn btn-outline" id="backToStep3">
-                                    <i class="fas fa-arrow-left"></i> Anterior
-                                </button>
-                                <button class="btn btn-accent" id="finishBtn">
-                                    Finalizar <i class="fas fa-check"></i>
-                                </button>
+                    <div>
+                        <h3>Vista Previa</h3>
+                        <div class="preview-container">
+                            <div class="preview-placeholder">
+                                <i class="fas fa-laptop-code"></i>
+                                <p>Selecciona una plantilla para ver la vista previa</p>
                             </div>
                         </div>
                     </div>
@@ -911,18 +990,183 @@
         </div>
     </section>
 
-    <!-- Vista Previa Section -->
-    <section class="preview" id="preview">
+    <!-- Personalización Section -->
+    <section class="ai-panel" id="customize">
         <div class="container">
-            <div class="preview-container">
-                <div class="preview-header">
-                    <h3>Vista Previa de tu Sitio Web</h3>
+            <div class="customization-panel">
+                <div class="customization-header">
+                    <h3>Personaliza tu Sitio Web</h3>
+                    <div class="btn btn-outline" id="saveBtn">Guardar Cambios</div>
                 </div>
-                <div class="preview-body">
-                    <div class="preview-placeholder">
-                        <i class="fas fa-laptop-code"></i>
-                        <h3>Tu vista previa aparecerá aquí</h3>
-                        <p>Completa los pasos del asistente para generar tu sitio web personalizado</p>
+                
+                <div class="customization-options">
+                    <div class="option-group">
+                        <label>Paleta de colores</label>
+                        <div class="color-picker">
+                            <div class="color-option selected" style="background-color: #4e54c8;" data-color="#4e54c8"></div>
+                            <div class="color-option" style="background-color: #ff6b6b;" data-color="#ff6b6b"></div>
+                            <div class="color-option" style="background-color: #28a745;" data-color="#28a745"></div>
+                            <div class="color-option" style="background-color: #ffc107;" data-color="#ffc107"></div>
+                            <div class="color-option" style="background-color: #17a2b8;" data-color="#17a2b8"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Tipografía</label>
+                        <select class="font-selector" id="fontSelector">
+                            <option value="Poppins">Poppins (Moderno)</option>
+                            <option value="Roboto">Roboto (Profesional)</option>
+                            <option value="Montserrat">Montserrat (Elegante)</option>
+                            <option value="Open Sans">Open Sans (Legible)</option>
+                            <option value="Playfair Display">Playfair Display (Clásico)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="option-group">
+                        <label>Diseño de Cabecera</label>
+                        <div class="layout-selector">
+                            <div class="layout-option selected" data-layout="header1">
+                                <i class="fas fa-align-left"></i>
+                                <div>Izquierda</div>
+                            </div>
+                            <div class="layout-option" data-layout="header2">
+                                <i class="fas fa-align-center"></i>
+                                <div>Centrado</div>
+                            </div>
+                            <div class="layout-option" data-layout="header3">
+                                <i class="fas fa-columns"></i>
+                                <div>Completo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="data-form">
+                    <h3>Datos de tu Sitio Web</h3>
+                    
+                    <div class="form-group">
+                        <label for="websiteTitle">Título del Sitio</label>
+                        <input type="text" id="websiteTitle" class="form-control" placeholder="Nombre de tu negocio o proyecto">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">Correo Electrónico</label>
+                        <input type="email" id="contactEmail" class="form-control" placeholder="contacto@tudominio.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactPhone">Teléfono</label>
+                        <input type="tel" id="contactPhone" class="form-control" placeholder="+123 456 7890">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactAddress">Dirección</label>
+                        <input type="text" id="contactAddress" class="form-control" placeholder="Calle, Ciudad, País">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="facebookUrl">Facebook</label>
+                        <input type="url" id="facebookUrl" class="form-control" placeholder="https://facebook.com/tupagina">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Logo de tu Sitio</label>
+                        <div class="image-upload" id="logoUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Haz clic para subir tu logo</p>
+                            <p class="file-info" id="logoFileInfo"></p>
+                            <img class="image-preview" id="logoPreview">
+                            <input type="file" id="logoUpload" accept="image/*" style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Imágenes de Portada</label>
+                        <div class="image-upload" id="coverUploadArea">
+                            <i class="fas fa-images"></i>
+                            <p>Haz clic para subir imágenes</p>
+                            <p class="file-info" id="coverFileInfo"></p>
+                            <img class="image-preview" id="coverPreview">
+                            <input type="file" id="coverUpload" accept="image/*" multiple style="display: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Código QR</label>
+                        <div class="qr-container">
+                            <div id="qrCode"></div>
+                            <p style="margin-top: 10px;">Este código QR se generará automáticamente con la URL de tu sitio</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; background: #f0f7ff; padding: 20px; border-radius: 15px;">
+                    <h4>Asistente de IA</h4>
+                    <p>¿Necesitas ayuda para personalizar tu sitio? Pídele sugerencias a nuestro asistente inteligente.</p>
+                    <button class="btn" style="margin-top: 15px;" id="aiHelpBtn">
+                        <i class="fas fa-robot"></i> Obtener Ayuda de IA
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Panel Section -->
+    <section class="ai-panel" id="ai">
+        <div class="container">
+            <div class="ai-container">
+                <div class="ai-header">
+                    <h2>Asistente de IA Personal</h2>
+                </div>
+                
+                <div class="ai-body">
+                    <div class="ai-chat">
+                        <h3>Tu Asistente Exclusivo</h3>
+                        <p>Esta IA aprende solo de ti y te ayuda a mejorar tus diseños</p>
+                        
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message ai">
+                                ¡Hola! Soy tu asistente de IA personal. ¿En qué puedo ayudarte hoy con tu página web?
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input">
+                            <input type="text" placeholder="Escribe tu pregunta..." id="aiInput">
+                            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3>Progreso de tu IA</h3>
+                        <p>Tu asistente personal mejora con cada interacción</p>
+                        
+                        <div class="ai-stats">
+                            <div class="stat-card">
+                                <div class="stat-value">92%</div>
+                                <div class="stat-label">Precisión</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-value">147</div>
+                                <div class="stat-label">Interacciones</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-value">24</div>
+                                <div class="stat-label">Proyectos</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-value">100%</div>
+                                <div class="stat-label">Privacidad</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 30px;">
+                            <h3>Configuración de IA</h3>
+                            <p>Personaliza cómo trabaja tu asistente inteligente</p>
+                            <div class="btn" style="margin-top: 15px;">Configurar IA</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -942,9 +1186,9 @@
                     <h3>Enlaces Rápidos</h3>
                     <ul class="footer-links">
                         <li><a href="#"><i class="fas fa-star"></i> Características</a></li>
-                        <li><a href="#assistant"><i class="fas fa-robot"></i> Asistente IA</a></li>
-                        <li><a href="#preview"><i class="fas fa-eye"></i> Vista Previa</a></li>
-                        <li><a href="#help"><i class="fas fa-question-circle"></i> Ayuda</a></li>
+                        <li><a href="#generator"><i class="fas fa-laptop-code"></i> Generador Web</a></li>
+                        <li><a href="#ai"><i class="fas fa-robot"></i> Asistente IA</a></li>
+                        <li><a href="#customize"><i class="fas fa-paint-brush"></i> Personalizar</a></li>
                     </ul>
                 </div>
                 
@@ -969,19 +1213,17 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Estado de la aplicación
             const appState = {
-                currentStep: 1,
-                template: 'restaurant',
+                currentTemplate: 'restaurant',
                 primaryColor: '#4e54c8',
                 secondaryColor: '#8f94fb',
                 fontFamily: 'Poppins',
                 websiteTitle: '',
                 logo: null,
                 coverImages: [],
-                galleryImages: [],
                 contactEmail: '',
                 contactPhone: '',
                 contactAddress: '',
-                socialMedia: [],
+                facebookUrl: '',
                 qrCode: null
             };
             
@@ -993,57 +1235,112 @@
                 navMenu.style.display = navMenu.style.display === 'flex' ? 'none' : 'flex';
             });
             
-            // Navegación del asistente
-            function goToStep(step) {
-                // Ocultar todos los pasos
-                document.querySelectorAll('.step-content').forEach(el => {
-                    el.classList.remove('active');
-                });
-                
-                // Desactivar todos los pasos
-                document.querySelectorAll('.step').forEach(el => {
-                    el.classList.remove('active');
-                });
-                
-                // Activar el paso actual
-                document.getElementById(`step${step}`).classList.add('active');
-                document.getElementById(`step${step}-content`).classList.add('active');
-                
-                // Actualizar estado
-                appState.currentStep = step;
-                
-                // Actualizar vista previa cuando llegamos al paso 4
-                if(step === 4) {
-                    updatePreview();
-                }
-            }
-            
-            // Eventos de navegación
-            document.getElementById('nextToStep2').addEventListener('click', () => goToStep(2));
-            document.getElementById('nextToStep3').addEventListener('click', () => goToStep(3));
-            document.getElementById('nextToStep4').addEventListener('click', () => goToStep(4));
-            
-            document.getElementById('backToStep1').addEventListener('click', () => goToStep(1));
-            document.getElementById('backToStep2').addEventListener('click', () => goToStep(2));
-            document.getElementById('backToStep3').addEventListener('click', () => goToStep(3));
-            
-            // Selección de plantilla
+            // Selección de plantillas
             document.querySelectorAll('.template').forEach(template => {
                 template.addEventListener('click', function() {
-                    document.querySelectorAll('.template').forEach(t => {
-                        t.style.border = 'none';
-                    });
-                    this.style.border = '3px solid var(--color-primary)';
-                    appState.template = this.dataset.template;
+                    document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
+                    this.classList.add('selected');
+                    appState.currentTemplate = this.dataset.template;
+                    
+                    // Actualizar vista previa
+                    updatePreview();
                 });
+            });
+            
+            // Actualizar vista previa
+            function updatePreview() {
+                const previewContainer = document.querySelector('.preview-container');
+                previewContainer.innerHTML = `
+                    <div style="width: 100%; height: 100%; background: white; border-radius: 10px; overflow: hidden; position: relative;">
+                        <div style="background: ${appState.primaryColor}; padding: 20px; color: white; font-family: ${appState.fontFamily};">
+                            <h3 style="margin: 0;">${appState.websiteTitle || getTemplateName(appState.currentTemplate)}</h3>
+                        </div>
+                        <div style="padding: 20px;">
+                            <div style="display: flex; gap: 20px; margin-bottom: 20px; align-items: center;">
+                                <div style="flex: 1; height: 100px; background: #f0f0f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+                                    ${appState.logo ? 
+                                        `<img src="${appState.logo}" style="max-width: 100%; max-height: 100%;">` : 
+                                        `<i class="fas fa-image" style="font-size: 2rem; color: #ccc;"></i>`
+                                    }
+                                </div>
+                                <div style="flex: 2;">
+                                    <h4 style="margin-top: 0; font-family: ${appState.fontFamily};">Contenido de muestra</h4>
+                                    <p style="font-family: ${appState.fontFamily};">Esta es una vista previa de cómo se verá tu sitio web con la plantilla seleccionada y las personalizaciones aplicadas.</p>
+                                </div>
+                            </div>
+                            <div style="background: ${appState.secondaryColor}; padding: 15px; border-radius: 10px; color: white; text-align: center; font-family: ${appState.fontFamily};">
+                                <p>¡Personaliza completamente cada aspecto de tu sitio!</p>
+                            </div>
+                        </div>
+                        <div style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; border-radius: 20px; font-size: 0.8rem;">
+                            Vista Previa
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Obtener nombre de plantilla
+            function getTemplateName(template) {
+                const names = {
+                    'restaurant': 'Restaurante',
+                    'store': 'Tienda Online',
+                    'blog': 'Blog Personal',
+                    'services': 'Servicios Profesionales'
+                };
+                return names[template] || 'Plantilla Personalizada';
+            }
+            
+            // Botón de personalización
+            document.getElementById('customizeBtn').addEventListener('click', function() {
+                document.querySelector('#customize').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Botón nuevo proyecto
+            document.getElementById('newProjectBtn').addEventListener('click', function() {
+                // Resetear selecciones
+                document.querySelector('.template.selected').classList.remove('selected');
+                document.querySelector('.template[data-template="restaurant"]').classList.add('selected');
+                appState.currentTemplate = 'restaurant';
+                
+                // Resetear personalización
+                document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.color-option[data-color="#4e54c8"]').classList.add('selected');
+                appState.primaryColor = '#4e54c8';
+                appState.secondaryColor = '#8f94fb';
+                
+                document.querySelectorAll('.layout-option').forEach(opt => opt.classList.remove('selected'));
+                document.querySelector('.layout-option[data-layout="header1"]').classList.add('selected');
+                appState.headerLayout = 'header1';
+                
+                document.getElementById('fontSelector').value = 'Poppins';
+                appState.fontFamily = 'Poppins';
+                
+                // Resetear datos
+                document.getElementById('websiteTitle').value = '';
+                document.getElementById('contactEmail').value = '';
+                document.getElementById('contactPhone').value = '';
+                document.getElementById('contactAddress').value = '';
+                document.getElementById('facebookUrl').value = '';
+                
+                // Resetear imágenes
+                appState.logo = null;
+                appState.coverImages = [];
+                document.getElementById('logoPreview').style.display = 'none';
+                document.getElementById('logoFileInfo').textContent = '';
+                document.getElementById('coverPreview').style.display = 'none';
+                document.getElementById('coverFileInfo').textContent = '';
+                
+                // Actualizar vista previa
+                updatePreview();
+                
+                // Mostrar mensaje
+                alert('¡Nuevo proyecto creado! Comienza seleccionando una plantilla.');
             });
             
             // Selector de colores
             document.querySelectorAll('.color-option').forEach(option => {
                 option.addEventListener('click', function() {
-                    document.querySelectorAll('.color-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
                     this.classList.add('selected');
                     appState.primaryColor = this.dataset.color;
                     
@@ -1053,51 +1350,36 @@
                     else if(appState.primaryColor === '#28a745') appState.secondaryColor = '#34ce57';
                     else if(appState.primaryColor === '#ffc107') appState.secondaryColor = '#ffd351';
                     else if(appState.primaryColor === '#17a2b8') appState.secondaryColor = '#39c0d3';
+                    
+                    updatePreview();
+                });
+            });
+            
+            // Selector de fuentes
+            document.getElementById('fontSelector').addEventListener('change', function() {
+                appState.fontFamily = this.value;
+                updatePreview();
+            });
+            
+            // Layout de cabecera
+            document.querySelectorAll('.layout-option[data-layout^="header"]').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.layout-option[data-layout^="header"]').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    appState.headerLayout = this.dataset.layout;
+                    
+                    updatePreview();
                 });
             });
             
             // Título del sitio
             document.getElementById('websiteTitle').addEventListener('input', function() {
                 appState.websiteTitle = this.value;
+                updatePreview();
+                generateQRCode();
             });
             
-            // Selector de fuentes
-            document.getElementById('fontSelector').addEventListener('change', function() {
-                appState.fontFamily = this.value;
-            });
-            
-            // Subida de archivos simulada
-            function setupFileUpload(uploadId, type) {
-                const uploadEl = document.getElementById(uploadId);
-                const fileInfo = uploadEl.querySelector('.file-info');
-                
-                uploadEl.addEventListener('click', function() {
-                    // Simular selección de archivo
-                    fileInfo.textContent = 'archivo_seleccionado.' + (type === 'logo' ? 'png' : 'jpg');
-                    fileInfo.style.color = '#28a745';
-                    
-                    // Simular carga de archivo
-                    uploadEl.innerHTML = `
-                        <i class="fas fa-check-circle" style="color:#28a745;"></i>
-                        <p>Archivo cargado correctamente</p>
-                        <p class="file-info" style="font-size: 0.9rem; color: #28a745; margin-top: 10px;">archivo_seleccionado.${type === 'logo' ? 'png' : 'jpg'}</p>
-                    `;
-                    
-                    // Actualizar estado
-                    if(type === 'logo') appState.logo = 'logo.png';
-                    else if(type === 'cover') appState.coverImages = ['cover1.jpg', 'cover2.jpg'];
-                    else if(type === 'gallery') appState.galleryImages = ['img1.jpg', 'img2.jpg', 'img3.jpg'];
-                    else if(type === 'qr') appState.qrCode = 'qrcode.png';
-                });
-            }
-            
-            // Configurar subidas
-            setupFileUpload('logoUpload', 'logo');
-            setupFileUpload('coverUpload', 'cover');
-            setupFileUpload('galleryUpload', 'gallery');
-            setupFileUpload('qrUpload', 'qr');
-            
-            // Contacto
+            // Datos de contacto
             document.getElementById('contactEmail').addEventListener('input', function() {
                 appState.contactEmail = this.value;
             });
@@ -1110,100 +1392,182 @@
                 appState.contactAddress = this.value;
             });
             
-            // Redes sociales
-            document.querySelectorAll('.social-item').forEach(item => {
-                item.addEventListener('click', function() {
-                    this.classList.toggle('selected');
-                    const social = this.dataset.social;
-                    
-                    if(this.classList.contains('selected')) {
-                        if(!appState.socialMedia.includes(social)) {
-                            appState.socialMedia.push(social);
-                        }
-                    } else {
-                        appState.socialMedia = appState.socialMedia.filter(s => s !== social);
-                    }
-                });
+            document.getElementById('facebookUrl').addEventListener('input', function() {
+                appState.facebookUrl = this.value;
             });
             
-            // Finalizar
-            document.getElementById('finishBtn').addEventListener('click', function() {
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando tu sitio...';
-                
-                setTimeout(() => {
-                    // Actualizar vista previa
-                    updatePreview();
-                    
-                    // Mostrar mensaje
-                    alert('¡Tu sitio web ha sido creado con éxito! Ahora puedes verlo en la sección de vista previa.');
-                    
-                    // Desplazar a vista previa
-                    document.querySelector('#preview').scrollIntoView({ behavior: 'smooth' });
-                    
-                    // Restaurar botón
-                    this.innerHTML = 'Finalizar <i class="fas fa-check"></i>';
-                }, 2000);
+            // Carga de logo
+            document.getElementById('logoUploadArea').addEventListener('click', function() {
+                document.getElementById('logoUpload').click();
             });
             
-            // Actualizar vista previa
-            function updatePreview() {
-                const previewEl = document.querySelector('.preview-placeholder');
-                
-                // Solo actualizar si tenemos datos suficientes
-                if(appState.websiteTitle || appState.contactEmail) {
-                    previewEl.innerHTML = `
-                        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
-                            <div style="margin-bottom: 40px;">
-                                <div style="font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; color: ${appState.primaryColor};">${appState.websiteTitle || 'Mi Sitio Web'}</div>
-                                <p>Este es un ejemplo de cómo se verá tu sitio web</p>
-                            </div>
-                            
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 40px;">
-                                <div style="background: #f8f9fa; border-radius: 15px; padding: 20px;">
-                                    <i class="fas fa-paint-brush" style="font-size: 2.5rem; color: ${appState.primaryColor}; margin-bottom: 15px;"></i>
-                                    <h3>Diseño Personalizado</h3>
-                                    <p>Plantilla: ${appState.template}, Fuente: ${appState.fontFamily}</p>
-                                </div>
-                                
-                                <div style="background: #f8f9fa; border-radius: 15px; padding: 20px;">
-                                    <i class="fas fa-image" style="font-size: 2.5rem; color: ${appState.primaryColor}; margin-bottom: 15px;"></i>
-                                    <h3>Imágenes</h3>
-                                    <p>${appState.logo ? 'Logo cargado' : 'Sin logo'}, ${appState.coverImages.length} imágenes de portada</p>
-                                </div>
-                            </div>
-                            
-                            <div style="background: ${appState.secondaryColor}; padding: 30px; border-radius: 15px; color: white;">
-                                <h3 style="margin-top: 0;">Información de Contacto</h3>
-                                <p>${appState.contactEmail ? 'Email: ' + appState.contactEmail : ''}</p>
-                                <p>${appState.contactPhone ? 'Teléfono: ' + appState.contactPhone : ''}</p>
-                                <p>${appState.contactAddress || ''}</p>
-                                
-                                <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
-                                    ${appState.socialMedia.includes('facebook') ? '<i class="fab fa-facebook fa-2x"></i>' : ''}
-                                    ${appState.socialMedia.includes('instagram') ? '<i class="fab fa-instagram fa-2x"></i>' : ''}
-                                    ${appState.socialMedia.includes('whatsapp') ? '<i class="fab fa-whatsapp fa-2x"></i>' : ''}
-                                </div>
-                            </div>
-                            
-                            <div style="margin-top: 40px;">
-                                <div class="btn" style="background: ${appState.primaryColor};">Ver Sitio Completo</div>
-                            </div>
-                        </div>
-                    `;
+            document.getElementById('logoUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        appState.logo = event.target.result;
+                        document.getElementById('logoPreview').src = event.target.result;
+                        document.getElementById('logoPreview').style.display = 'block';
+                        document.getElementById('logoFileInfo').textContent = file.name;
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
                 }
+            });
+            
+            // Carga de imágenes de portada
+            document.getElementById('coverUploadArea').addEventListener('click', function() {
+                document.getElementById('coverUpload').click();
+            });
+            
+            document.getElementById('coverUpload').addEventListener('change', function(e) {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    const file = files[0]; // Tomamos solo la primera imagen para la vista previa
+                    appState.coverImages = Array.from(files);
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('coverPreview').src = event.target.result;
+                        document.getElementById('coverPreview').style.display = 'block';
+                        document.getElementById('coverFileInfo').textContent = `${files.length} imágenes seleccionadas`;
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Generar código QR
+            function generateQRCode() {
+                const qrContainer = document.getElementById('qrCode');
+                qrContainer.innerHTML = '';
+                
+                const websiteTitle = appState.websiteTitle || 'MiSitioWeb';
+                const url = `https://${websiteTitle.toLowerCase().replace(/\s+/g, '')}.com`;
+                
+                QRCode.toCanvas(qrContainer, url, { width: 150 }, function(error) {
+                    if (error) console.error(error);
+                });
             }
             
-            // Guardar proyecto
-            document.getElementById('saveProjectBtn').addEventListener('click', function() {
+            // Inicializar código QR
+            generateQRCode();
+            
+            // Botón guardar
+            document.getElementById('saveBtn').addEventListener('click', function() {
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
                 
                 setTimeout(() => {
-                    this.innerHTML = '<i class="fas fa-check"></i> Proyecto Guardado';
+                    this.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
                     setTimeout(() => {
-                        this.innerHTML = 'Guardar Proyecto';
+                        this.innerHTML = 'Guardar Cambios';
                     }, 2000);
                 }, 1000);
             });
+            
+            // Botón ayuda IA
+            document.getElementById('aiHelpBtn').addEventListener('click', function() {
+                document.querySelector('#ai').scrollIntoView({ behavior: 'smooth' });
+                
+                // Enviar mensaje automático
+                setTimeout(() => {
+                    const chatMessages = document.getElementById('chatMessages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.classList.add('message', 'ai');
+                    messageDiv.textContent = "He notado que estás personalizando tu sitio. ¿Necesitas sugerencias de diseño? Puedo ayudarte a elegir colores, fuentes o layouts que se adapten a tu negocio.";
+                    chatMessages.appendChild(messageDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 500);
+            });
+            
+            // Chat con IA
+            const chatInput = document.getElementById('aiInput');
+            const sendBtn = document.getElementById('sendMessage');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user' : 'ai');
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            sendBtn.addEventListener('click', sendMessage);
+            
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+            
+            function sendMessage() {
+                if (chatInput.value.trim() !== '') {
+                    addMessage(chatInput.value, true);
+                    
+                    // Respuesta simulada de IA
+                    setTimeout(() => {
+                        const responses = [
+                            "Para tu plantilla de " + getTemplateName(appState.currentTemplate) + ", te recomendaría usar colores complementarios. ¿Te gustaría que sugiera una paleta?",
+                            "La fuente " + appState.fontFamily + " es una buena elección. ¿Quieres ver cómo se vería con un tamaño de letra más grande?",
+                            "He analizado tu diseño actual. Podría optimizar el layout para mejorar la experiencia del usuario. ¿Quieres que genere algunas opciones?",
+                            "Tengo algunas ideas para implementar en tu sitio. ¿Te gustaría que te muestre ejemplos?",
+                            "Basado en tu selección actual, creo que podrías beneficiarte de un diseño más minimalista. ¿Quieres que te sugiera cambios?"
+                        ];
+                        addMessage(responses[Math.floor(Math.random() * responses.length)]);
+                    }, 1000);
+                    
+                    chatInput.value = '';
+                }
+            }
+            
+            // Simulación de IA que aprende
+            console.log("Inicializando IA personal...");
+            console.log("Modo de aprendizaje activado - Analizando preferencias de diseño...");
+            console.log("Preparando modelos de diseño predictivo...");
+            
+            // Simular actualización de IA cada 2 minutos
+            setInterval(() => {
+                // Solo mostrar notificación si el usuario es admin
+                if (isAdmin) {
+                    showAdminNotification();
+                }
+                
+                // Actualizar estadísticas de IA
+                document.querySelectorAll('.stat-value')[0].textContent = `${Math.min(100, Math.floor(Math.random() * 5) + 95)}%`;
+                document.querySelectorAll('.stat-value')[1].textContent = `${Math.floor(Math.random() * 50) + 150}`;
+            }, 120000);
+            
+            // Notificación para admin
+            function showAdminNotification() {
+                const notification = document.getElementById('adminNotification');
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 10000);
+            }
+            
+            // Cerrar notificación
+            document.getElementById('closeNotification').addEventListener('click', function() {
+                document.getElementById('adminNotification').classList.remove('show');
+            });
+            
+            // Acceso admin
+            let isAdmin = false;
+            document.getElementById('adminLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                const password = prompt("Ingrese la contraseña de administrador:");
+                if (password === "admin123") {
+                    isAdmin = true;
+                    alert("¡Acceso de administrador concedido! Recibirás notificaciones de actualizaciones de IA.");
+                } else {
+                    alert("Contraseña incorrecta. Acceso denegado.");
+                }
+            });
+            
+            // Inicializar vista previa
+            updatePreview();
         });
     </script>
 </body>
