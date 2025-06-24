@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebGen Creator - IA Generadora de Páginas Web</title>
+    <title>WebGen Creator - Plataforma Completa</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"></script>
@@ -37,6 +37,141 @@
             overflow-x: hidden;
             min-height: 100vh;
             background-image: radial-gradient(circle at 15% 50%, rgba(143, 148, 251, 0.1) 0%, rgba(143, 148, 251, 0) 25%), radial-gradient(circle at 85% 30%, rgba(255, 107, 107, 0.1) 0%, rgba(255, 107, 107, 0) 25%);
+        }
+        
+        /* Modal de autenticación */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+        
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        
+        .close-auth {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .auth-tab {
+            padding: 15px 30px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #777;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-tab.active {
+            color: var(--color-primary);
+            border-bottom: 3px solid var(--color-primary);
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .auth-form h2 {
+            margin-bottom: 25px;
+            color: var(--color-dark);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: var(--gradient-primary);
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.4s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(78, 84, 200, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.1);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
+        }
+        
+        .btn:hover:before {
+            transform: translateX(100%);
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(78, 84, 200, 0.4);
+        }
+        
+        .btn-accent {
+            background: var(--gradient-accent);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+            box-shadow: none;
         }
         
         /* Header */
@@ -151,56 +286,6 @@
             margin-bottom: 40px;
             color: var(--color-text);
             opacity: 0.9;
-        }
-        
-        .btn {
-            display: inline-block;
-            background: var(--gradient-primary);
-            color: white;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.4s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1.1rem;
-            box-shadow: 0 8px 25px rgba(78, 84, 200, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.1);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-        
-        .btn:hover:before {
-            transform: translateX(100%);
-        }
-        
-        .btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(78, 84, 200, 0.4);
-        }
-        
-        .btn-accent {
-            background: var(--gradient-accent);
-            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-            box-shadow: none;
         }
         
         /* Cards de características */
@@ -370,7 +455,6 @@
             justify-content: center;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.05);
             overflow: auto;
-            position: relative;
         }
         
         .preview-placeholder {
@@ -611,20 +695,6 @@
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
         .image-upload {
             border: 2px dashed #ddd;
             border-radius: 12px;
@@ -669,6 +739,59 @@
             padding: 10px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Vista de redes sociales */
+        .social-previews {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-preview {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .social-preview h4 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .social-preview-content {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .social-instagram {
+            border-left: 5px solid #e1306c;
+        }
+        
+        .social-facebook {
+            border-left: 5px solid #3b5998;
+        }
+        
+        .social-twitter {
+            border-left: 5px solid #1da1f2;
+        }
+        
+        .social-preview img {
+            max-width: 100%;
+            max-height: 180px;
+            border-radius: 8px;
         }
 
         /* Notificación Admin */
@@ -875,10 +998,59 @@
             .ai-stats {
                 grid-template-columns: 1fr;
             }
+            
+            .auth-container {
+                padding: 30px 20px;
+            }
+            
+            .auth-tab {
+                padding: 10px 15px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Modal de autenticación -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-container">
+            <button class="close-auth" id="closeAuth">&times;</button>
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-tab="login">Iniciar Sesión</div>
+                <div class="auth-tab" data-tab="changePassword">Cambiar Contraseña</div>
+            </div>
+            
+            <div class="auth-form active" id="loginForm">
+                <h2>Acceso de Administrador</h2>
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" class="form-control" placeholder="Ingresa tu usuario">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" class="form-control" placeholder="Ingresa tu contraseña">
+                </div>
+                <button class="btn" id="loginBtn">Ingresar</button>
+            </div>
+            
+            <div class="auth-form" id="changePasswordForm">
+                <h2>Cambiar Contraseña</h2>
+                <div class="form-group">
+                    <label for="currentPassword">Contraseña Actual</label>
+                    <input type="password" id="currentPassword" class="form-control" placeholder="Ingresa tu contraseña actual">
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">Nueva Contraseña</label>
+                    <input type="password" id="newPassword" class="form-control" placeholder="Ingresa tu nueva contraseña">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirmar Contraseña</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Confirma tu nueva contraseña">
+                </div>
+                <button class="btn" id="changePasswordBtn">Cambiar Contraseña</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Notificación para Admin -->
     <div class="admin-notification" id="adminNotification">
         <div class="notification-header">
@@ -1128,7 +1300,7 @@
                         <label>Logo de tu Sitio</label>
                         <div class="image-upload" id="logoUploadArea">
                             <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Haz clic para subir tu logo</p>
+                            <p>Haz clic para subir tu logo (JPG, PNG, SVG)</p>
                             <p class="file-info" id="logoFileInfo"></p>
                             <img class="image-preview" id="logoPreview">
                             <input type="file" id="logoUpload" accept="image/*" style="display: none;">
@@ -1139,7 +1311,7 @@
                         <label>Imágenes de Portada</label>
                         <div class="image-upload" id="coverUploadArea">
                             <i class="fas fa-images"></i>
-                            <p>Haz clic para subir imágenes</p>
+                            <p>Haz clic para subir imágenes (JPG, PNG)</p>
                             <p class="file-info" id="coverFileInfo"></p>
                             <img class="image-preview" id="coverPreview">
                             <input type="file" id="coverUpload" accept="image/*" multiple style="display: none;">
@@ -1151,6 +1323,9 @@
                         <div class="qr-container">
                             <div id="qrCode"></div>
                             <p style="margin-top: 10px;">Este código QR se generará automáticamente con la URL de tu sitio</p>
+                            <button class="btn" style="margin-top: 15px;" id="downloadQr">
+                                <i class="fas fa-download"></i> Descargar QR (JPG)
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1171,6 +1346,41 @@
                         </button>
                     </div>
                     <pre id="generatedCode">// La IA generará el código aquí después de personalizar</pre>
+                </div>
+                
+                <div class="social-previews">
+                    <div class="social-preview social-instagram">
+                        <h4><i class="fab fa-instagram"></i> Vista Instagram</h4>
+                        <div class="social-preview-content">
+                            <img src="" id="instagramPreview" style="display: none;">
+                            <div class="preview-placeholder" id="instagramPlaceholder">
+                                <i class="fab fa-instagram" style="font-size: 3rem; color: #e1306c;"></i>
+                                <p>Vista previa para Instagram</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-preview social-facebook">
+                        <h4><i class="fab fa-facebook"></i> Vista Facebook</h4>
+                        <div class="social-preview-content">
+                            <img src="" id="facebookPreview" style="display: none;">
+                            <div class="preview-placeholder" id="facebookPlaceholder">
+                                <i class="fab fa-facebook" style="font-size: 3rem; color: #3b5998;"></i>
+                                <p>Vista previa para Facebook</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="social-preview social-twitter">
+                        <h4><i class="fab fa-twitter"></i> Vista Twitter</h4>
+                        <div class="social-preview-content">
+                            <img src="" id="twitterPreview" style="display: none;">
+                            <div class="preview-placeholder" id="twitterPlaceholder">
+                                <i class="fab fa-twitter" style="font-size: 3rem; color: #1da1f2;"></i>
+                                <p>Vista previa para Twitter</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1287,6 +1497,14 @@
     </footer>
 
     <script>
+        // Estado de autenticación
+        const authState = {
+            isAdmin: false,
+            username: 'admin',
+            password: 'admin123',
+            showAuthModal: true
+        };
+
         // IA Evolutiva - Generadora de código HTML/CSS
         class WebGeneratorAI {
             constructor() {
@@ -1300,6 +1518,7 @@
                 this.projectCount = 32;
                 this.accuracy = 96;
                 this.generatedCode = "";
+                this.learningUpdates = [];
             }
             
             // Generar código HTML basado en las preferencias del usuario
@@ -1573,7 +1792,26 @@
                 return names[template] || 'Sitio Web Personalizado';
             }
             
-            // Resto de métodos de IA...
+            // Agregar una nueva actualización de aprendizaje
+            addLearningUpdate(update) {
+                this.learningUpdates.push(update);
+            }
+            
+            // Obtener actualizaciones pendientes
+            getPendingUpdates() {
+                return this.learningUpdates;
+            }
+            
+            // Aprobar una actualización
+            approveUpdate(index) {
+                if (index >= 0 && index < this.learningUpdates.length) {
+                    const update = this.learningUpdates[index];
+                    this.knowledge.push(update);
+                    this.learningUpdates.splice(index, 1);
+                    return true;
+                }
+                return false;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -1596,6 +1834,86 @@
                 isAdmin: false,
                 ai: webGeneratorAI
             };
+            
+            // Mostrar modal de autenticación al cargar
+            const authModal = document.getElementById('authModal');
+            authModal.style.display = 'flex';
+            
+            // Cerrar modal de autenticación
+            document.getElementById('closeAuth').addEventListener('click', function() {
+                authModal.style.display = 'none';
+            });
+            
+            // Cambiar entre pestañas de autenticación
+            document.querySelectorAll('.auth-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    
+                    // Actualizar pestañas activas
+                    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Mostrar formulario correspondiente
+                    document.querySelectorAll('.auth-form').forEach(form => {
+                        form.classList.remove('active');
+                    });
+                    document.getElementById(tabName + 'Form').classList.add('active');
+                });
+            });
+            
+            // Iniciar sesión
+            document.getElementById('loginBtn').addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username === authState.username && password === authState.password) {
+                    authState.isAdmin = true;
+                    authModal.style.display = 'none';
+                    alert('¡Acceso de administrador concedido!');
+                } else {
+                    alert('Credenciales incorrectas. Inténtalo de nuevo.');
+                }
+            });
+            
+            // Cambiar contraseña
+            document.getElementById('changePasswordBtn').addEventListener('click', function() {
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (currentPassword !== authState.password) {
+                    alert('La contraseña actual es incorrecta.');
+                    return;
+                }
+                
+                if (newPassword !== confirmPassword) {
+                    alert('Las contraseñas nuevas no coinciden.');
+                    return;
+                }
+                
+                if (newPassword.length < 6) {
+                    alert('La contraseña debe tener al menos 6 caracteres.');
+                    return;
+                }
+                
+                authState.password = newPassword;
+                alert('¡Contraseña cambiada con éxito!');
+                document.getElementById('currentPassword').value = '';
+                document.getElementById('newPassword').value = '';
+                document.getElementById('confirmPassword').value = '';
+                
+                // Cambiar a pestaña de login
+                document.querySelectorAll('.auth-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelector('.auth-tab[data-tab="login"]').classList.add('active');
+                document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
+                document.getElementById('loginForm').classList.add('active');
+            });
+            
+            // Acceso admin desde el menú
+            document.getElementById('adminLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                authModal.style.display = 'flex';
+            });
             
             // Actualizar vista previa con el código generado
             function updatePreview() {
@@ -1631,10 +1949,52 @@
                 iframeDoc.open();
                 iframeDoc.write(htmlCode);
                 iframeDoc.close();
+                
+                // Actualizar vistas de redes sociales
+                updateSocialPreviews();
+            }
+            
+            // Actualizar vistas para redes sociales
+            function updateSocialPreviews() {
+                // Instagram
+                if (appState.logo) {
+                    document.getElementById('instagramPreview').src = appState.logo;
+                    document.getElementById('instagramPreview').style.display = 'block';
+                    document.getElementById('instagramPlaceholder').style.display = 'none';
+                } else {
+                    document.getElementById('instagramPreview').style.display = 'none';
+                    document.getElementById('instagramPlaceholder').style.display = 'flex';
+                }
+                
+                // Facebook
+                if (appState.coverImages.length > 0) {
+                    document.getElementById('facebookPreview').src = appState.coverImages[0];
+                    document.getElementById('facebookPreview').style.display = 'block';
+                    document.getElementById('facebookPlaceholder').style.display = 'none';
+                } else {
+                    document.getElementById('facebookPreview').style.display = 'none';
+                    document.getElementById('facebookPlaceholder').style.display = 'flex';
+                }
+                
+                // Twitter
+                if (appState.logo) {
+                    document.getElementById('twitterPreview').src = appState.logo;
+                    document.getElementById('twitterPreview').style.display = 'block';
+                    document.getElementById('twitterPlaceholder').style.display = 'none';
+                } else {
+                    document.getElementById('twitterPreview').style.display = 'none';
+                    document.getElementById('twitterPlaceholder').style.display = 'flex';
+                }
             }
             
             // Descargar el código generado
             document.getElementById('downloadCode').addEventListener('click', function() {
+                if (!authState.isAdmin) {
+                    alert('Solo los administradores pueden descargar el código. Inicia sesión como administrador.');
+                    authModal.style.display = 'flex';
+                    return;
+                }
+                
                 const htmlCode = appState.ai.generatedCode;
                 const blob = new Blob([htmlCode], { type: 'text/html' });
                 const url = URL.createObjectURL(blob);
@@ -1650,10 +2010,22 @@
                 alert('¡Código descargado con éxito! Ahora puedes subirlo a cualquier servidor web.');
             });
             
+            // Descargar QR como JPG
+            document.getElementById('downloadQr').addEventListener('click', function() {
+                const qrCanvas = document.querySelector('#qrCode canvas');
+                if (qrCanvas) {
+                    const url = qrCanvas.toDataURL('image/jpeg');
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'codigo-qr.jpg';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                }
+            });
+            
             // Inicializar vista previa
             updatePreview();
-            
-            // Resto del código de interacción...
             
             // Selector de plantillas
             document.querySelectorAll('.template').forEach(template => {
@@ -1718,6 +2090,126 @@
             // Botón de personalización
             document.getElementById('customizeBtn').addEventListener('click', function() {
                 document.querySelector('#customize').scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Carga de logo
+            document.getElementById('logoUploadArea').addEventListener('click', function() {
+                document.getElementById('logoUpload').click();
+            });
+            
+            document.getElementById('logoUpload').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    // Verificar tipo de archivo
+                    const validTypes = ['image/jpeg', 'image/png', 'image/svg+xml'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Por favor, selecciona un archivo de imagen válido (JPG, PNG, SVG)');
+                        return;
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        appState.logo = event.target.result;
+                        document.getElementById('logoPreview').src = event.target.result;
+                        document.getElementById('logoPreview').style.display = 'block';
+                        document.getElementById('logoFileInfo').textContent = file.name;
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Carga de imágenes de portada
+            document.getElementById('coverUploadArea').addEventListener('click', function() {
+                document.getElementById('coverUpload').click();
+            });
+            
+            document.getElementById('coverUpload').addEventListener('change', function(e) {
+                const files = e.target.files;
+                if (files.length > 0) {
+                    // Verificar el primer archivo
+                    const validTypes = ['image/jpeg', 'image/png'];
+                    if (!validTypes.includes(files[0].type)) {
+                        alert('Por favor, selecciona archivos de imagen válidos (JPG, PNG)');
+                        return;
+                    }
+                    
+                    const file = files[0]; // Tomamos solo la primera imagen para la vista previa
+                    appState.coverImages = Array.from(files);
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        document.getElementById('coverPreview').src = event.target.result;
+                        document.getElementById('coverPreview').style.display = 'block';
+                        document.getElementById('coverFileInfo').textContent = `${files.length} imágenes seleccionadas`;
+                        updatePreview();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Generar código QR
+            function generateQRCode() {
+                const qrContainer = document.getElementById('qrCode');
+                qrContainer.innerHTML = '';
+                
+                const websiteTitle = appState.websiteTitle || 'MiSitioWeb';
+                const url = `https://${websiteTitle.toLowerCase().replace(/\s+/g, '')}.com`;
+                
+                QRCode.toCanvas(qrContainer, url, { 
+                    width: 150,
+                    margin: 1,
+                    color: {
+                        dark: appState.primaryColor,
+                        light: '#ffffff'
+                    }
+                }, function(error) {
+                    if (error) console.error(error);
+                });
+            }
+            
+            // Inicializar código QR
+            generateQRCode();
+            
+            // Simular actualizaciones de IA
+            function simulateLearning() {
+                const newUpdates = [
+                    "Técnicas avanzadas de animación CSS",
+                    "Integración con plataformas de pago",
+                    "Optimización de rendimiento para móviles",
+                    "Nuevas tendencias de diseño para e-commerce"
+                ];
+                
+                const randomUpdate = newUpdates[Math.floor(Math.random() * newUpdates.length)];
+                appState.ai.addLearningUpdate(randomUpdate);
+                
+                // Mostrar notificación si es admin
+                if (authState.isAdmin) {
+                    const notification = document.getElementById('adminNotification');
+                    const notificationText = notification.querySelector('p');
+                    notificationText.textContent = `La IA ha aprendido: "${randomUpdate}". ¿Deseas aplicar esta mejora a tu sitio?`;
+                    notification.classList.add('show');
+                }
+                
+                // Programar siguiente aprendizaje
+                setTimeout(simulateLearning, 30000); // Cada 30 segundos
+            }
+            
+            // Iniciar simulación de aprendizaje
+            setTimeout(simulateLearning, 5000);
+            
+            // Aplicar mejoras
+            document.getElementById('applyImprovements').addEventListener('click', function() {
+                if (appState.ai.learningUpdates.length > 0) {
+                    appState.ai.approveUpdate(0);
+                    alert('¡Mejoras aplicadas con éxito! La IA ha actualizado tu sitio con las últimas técnicas aprendidas.');
+                }
+                document.getElementById('adminNotification').classList.remove('show');
+            });
+            
+            // Posponer notificación
+            document.getElementById('laterNotification').addEventListener('click', function() {
+                document.getElementById('adminNotification').classList.remove('show');
             });
         });
     </script>
